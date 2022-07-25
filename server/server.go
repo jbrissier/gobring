@@ -60,18 +60,19 @@ func GetBring(c *gin.Context) {
 func CorsMiddelware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Request-Method", "GET POST DELETE PUT OPTIONS")
+		c.Header("Access-Control-Request-Method", "POST, GET, PUT, OPTIONS, DELETE")
 	}
 }
 
 func StarServer() {
 	r := gin.Default()
-	r.Use(static.Serve("/", static.LocalFile("static", false)))
+	r.Use(static.Serve("/", static.LocalFile("static", true)))
+	r.Use(static.Serve("/public", static.LocalFile("svelte-app/public", false)))
 	r.Use(CorsMiddelware())
 	r.GET("api/bring", AllBrings)
 	r.GET("api/bring/:id", GetBring)
 	r.POST("api/bring", CreateBring)
 	r.DELETE("api/bring", DeleteBring)
 
-	r.Run(":8000")
+	r.Run()
 }
