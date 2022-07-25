@@ -1,24 +1,26 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, createEventDispatcher } from 'svelte';
 import _ from 'lodash'
 
 
     export let id = 0;
     export let data = {}
+    const dispatch = createEventDispatcher();
 
     function deleteBring(){
-        fetch(`http://localhost:8000/api/bring/${id}`, {
+        fetch(`/api/bring/${data.id}`, {
             method: 'DELETE'
           
         })
         .then(response => response.json())
         .then(data => {
+            dispatch("change", data)
             console.log(data)
         })
     }
 
     function fetchData() {
-        return fetch(`http://localhost:8000/api/bring/${id}`)
+        return fetch(`api/bring/${id}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

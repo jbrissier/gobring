@@ -19,7 +19,6 @@
 </script>
 
 
-
 <p>Hallo {username} </p>
 <input type="text" placeholder="Username" bind:value={username} id="username">
 <hr/>
