@@ -26,7 +26,7 @@ func DeleteBring(c *gin.Context) {
 
 	err := model.DeleteBring((uint)(idStr))
 	if err != nil {
-		c.JSON(404, gin.H{"Error": "Not found or DB Error"})
+		c.JSON(404, gin.H{"Error": err.Error()})
 		return
 	}
 
@@ -66,13 +66,12 @@ func CorsMiddelware() gin.HandlerFunc {
 
 func StarServer() {
 	r := gin.Default()
-	r.Use(static.Serve("/", static.LocalFile("static", true)))
-	r.Use(static.Serve("/public", static.LocalFile("svelte-app/public", false)))
+	r.Use(static.Serve("/", static.LocalFile("svelte-app/public", false)))
 	r.Use(CorsMiddelware())
 	r.GET("api/bring", AllBrings)
 	r.GET("api/bring/:id", GetBring)
 	r.POST("api/bring", CreateBring)
-	r.DELETE("api/bring", DeleteBring)
+	r.DELETE("api/bring/:id", DeleteBring)
 
 	r.Run()
 }
