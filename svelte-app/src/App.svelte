@@ -1,25 +1,34 @@
 <script>
+	import { Router, Route, Link } from "svelte-navigator";
+	import Login from "./Login.svelte";
 	import Brings from "./brings.svelte";
 	import { onMount } from "svelte";
-	import _ from 'lodash'
+	import _ from "lodash";
 
+	
 	let username;
 
-	onMount(()=>{
-		username = window.localStorage.getItem("username")
 
-	})
+
+	onMount(() => {
+		username = window.localStorage.getItem("username");
+	});
 
 	$: {
-		if(!_.isNil(username)) {
-
+		if (!_.isNil(username)) {
 			window.localStorage.setItem("username", username);
 		}
 	}
 </script>
 
-
-<p>Hallo {username} </p>
-<input type="text" placeholder="Username" bind:value={username} id="username">
-<hr/>
-<Brings />
+<Router>
+	<Link to="/bring">Brings</Link>
+	<main>
+		<Route path="/">
+			<Login bind:username={username}/>
+		</Route>
+		<Route path="/brings">
+			<Brings />
+		</Route>
+	</main>
+</Router>
