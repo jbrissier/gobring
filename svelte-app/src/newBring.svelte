@@ -1,5 +1,6 @@
 <script>
     import {createEventDispatcher, onMount} from 'svelte'
+    import {store} from './store.js'
     import Time from './time.svelte'
     import _ from 'lodash'
     let where;
@@ -23,13 +24,14 @@
     const dispatch = createEventDispatcher();
     
     function saveNewBring() {
+        alert($store.username);
         fetch("/api/bring", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({ where: where, until: _.toInteger( time) }) }).then(data => {
+            body: JSON.stringify({ where: where, until: _.toInteger( time), user: $store.username }) }).then(data => {
       
             where = ""
             dispatch("change", data)
@@ -49,7 +51,7 @@
 </script>
 
 <div>
-    <p>Bringst du was mit?</p>
+    <p>Bringst du was mit {$store.username}?</p>
 
     {#if selected != "sonstiges"}
     <select bind:value={selected}>

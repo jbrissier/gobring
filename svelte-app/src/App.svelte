@@ -1,5 +1,5 @@
 <script>
-	import { Router, Route, Link } from "svelte-navigator";
+	import {store} from './store.js';
 	import Login from "./Login.svelte";
 	import Brings from "./brings.svelte";
 	import { onMount } from "svelte";
@@ -12,6 +12,7 @@
 
 	onMount(() => {
 		username = window.localStorage.getItem("username");
+		store.set({username: username});
 	});
 
 	$: {
@@ -21,14 +22,5 @@
 	}
 </script>
 
-<Router>
-	<Link to="/bring">Brings</Link>
-	<main>
-		<Route path="/">
-			<Login bind:username={username}/>
-		</Route>
-		<Route path="/brings">
+			<Login bind:value={username}/>
 			<Brings />
-		</Route>
-	</main>
-</Router>

@@ -7,8 +7,7 @@ import _ from 'lodash'
     export let data = {}
     const dispatch = createEventDispatcher();
     
-    const defaultOptions = ["Aldi", "Lidl", "Rewe", "Edka", "Döner", "Pizza", "sonstiges"]
-
+   
     function deleteBring(){
         fetch(`/api/bring/${data.id}`, {
             method: 'DELETE'
@@ -46,7 +45,7 @@ import _ from 'lodash'
 </script>
 
 <hr/>
-<h2>Bring {data.where}  [{data.id}]</h2>
+<h2>{data.user} Bring {data.where}  [{data.id}]</h2>
 <p>{data.description}</p>
 <p>@{data.until}</p>
 
