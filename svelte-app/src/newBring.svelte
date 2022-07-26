@@ -5,11 +5,19 @@
     let where;
     let ref = null;
     let time = "";
+    let defaultOptions = ["Aldi", "Lidl", "Rewe", "Edka", "Döner", "Pizza", "Curry", "sonstiges"]
+    let selected = defaultOptions[0];
 
+    $: {
+        where = selected
+        if(selected === "sonstiges"){
+            if(ref){
+                ref.focus(); 
 
-    onMount(() => {
-        ref.focus(); 
-    });
+            }
+
+        }
+    }
 
 
     const dispatch = createEventDispatcher();
@@ -43,9 +51,16 @@
 <div>
     <p>Bringst du was mit?</p>
 
-    
-    <input  bind:this={ref} type="text" placeholder="Where" bind:value={where} on:keypress={checkEnter} id="where" />
+    {#if selected != "sonstiges"}
+    <select bind:value={selected}>
+        {#each defaultOptions as df}
+            <option>{df}</option>
+        {/each}
+    </select>
+    {/if}
+    {#if selected === "sonstiges"}
+        <input  bind:this={ref} type="text" placeholder="Where" bind:value={where} on:keypress={checkEnter} id="where" />
+    {/if}
     <Time bind:time={time} />
     <button on:click={saveNewBring}> ok</button>
-    {time}
 </div>

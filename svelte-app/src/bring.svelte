@@ -6,6 +6,8 @@ import _ from 'lodash'
     export let id = 0;
     export let data = {}
     const dispatch = createEventDispatcher();
+    
+    const defaultOptions = ["Aldi", "Lidl", "Rewe", "Edka", "Döner", "Pizza", "sonstiges"]
 
     function deleteBring(){
         fetch(`/api/bring/${data.id}`, {
