@@ -10,7 +10,7 @@ import _ from 'lodash'
     function deleteBring(){
         fetch(`/api/bring/${data.id}`, {
             method: 'DELETE'
-          
+
         })
         .then(response => response.json())
         .then(data => {
@@ -29,11 +29,12 @@ import _ from 'lodash'
     }
 
     onMount(() => {
-        
+
         console.log('data is not empty', data)
         if(!_.isEmpty(data)) {
             return
-        }
+            }
+
 
         fetchData().then(serverDate => {
             data = serverDate;

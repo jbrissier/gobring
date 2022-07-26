@@ -7,12 +7,12 @@
 
 	onMount(()=>{
 		username = window.localStorage.getItem("username")
-			
+
 	})
 
 	$: {
 		if(!_.isNil(username)) {
-	
+
 			window.localStorage.setItem("username", username);
 		}
 	}
