@@ -44,9 +44,55 @@ import _ from 'lodash'
 
 </script>
 
-<hr/>
-<h2>{data.user} Bring {data.where}  [{data.id}]</h2>
-<p>{data.description}</p>
-<p>@{data.until}</p>
+<div class="bring">
+    
+    <div class="info">
+        <div class="where">{data.where} </div>
+        <div class="detail">
+            <div>@{data.until}
+             
+        </div>
+            <div>{data.user}</div>
+        </div>
+    </div>
 
-<button on:click={deleteBring}>Delete</button>
+    <div class="plus">+</div>
+
+</div>
+
+<button on:click={deleteBring}>delete</button>
+
+
+
+<style>
+
+    .bring{
+        margin: 1rem 0;
+        padding: 3rem;
+        border-left: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .plus{
+		font-size: 2rem;
+		cursor: pointer;
+	}
+
+    .bring .info{
+        display: flex;
+ 
+        align-items: center;
+        
+    }
+    .where{
+        margin-right: 2rem;
+        font-size: 1.5rem;
+        
+    }
+    .bring .info .detail{
+        display: flex;
+        flex-direction: column;
+    }
+
+</style>

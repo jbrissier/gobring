@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher, onMount} from 'svelte'
-    import {store} from './store.js'
+    import {store, brings} from './store.js'
     import Time from './time.svelte'
     import _ from 'lodash'
     let where;
@@ -24,7 +24,7 @@
     const dispatch = createEventDispatcher();
     
     function saveNewBring() {
-        alert($store.username);
+
         fetch("/api/bring", {
             method: "POST",
             headers: {
@@ -32,9 +32,11 @@
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({ where: where, until: _.toInteger( time), user: $store.username }) }).then(data => {
-      
-            where = ""
+     
             dispatch("change", data)
+            brings.update(brings => [...brings, data])
+
+
         });
     }
     

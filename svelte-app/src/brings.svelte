@@ -1,9 +1,11 @@
 <script>
     import Bring from "./bring.svelte";
     import NewBring from "./newBring.svelte";
+    import {brings} from './store.js'
     import { onMount } from "svelte";
 
-    let brings = [];
+
+
     
 
 
@@ -12,7 +14,10 @@
             .then(response => response.json())
             .then(data => {
                
-                brings = data;
+        
+
+                brings.set(data)
+
             });
     }
 
@@ -20,11 +25,12 @@
 
 
 </script>
-<h2>All Brings of the day</h2>
-<NewBring on:change={fetchData}/>
 
-{#each brings as bring}
 
-    <Bring on:change={fetchData} id={bring.ID} data={bring}/>
+
+<NewBring/>
+
+{#each $brings as bring}
+
+<Bring on:change={fetchData} id={bring.ID} data={bring}/>
 {/each}
-<hr/>

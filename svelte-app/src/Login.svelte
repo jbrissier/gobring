@@ -3,12 +3,17 @@
     
     let username = '';
     export let value = undefined; 
+    let show = value !== undefined
     let ref = null;
     
     function handleSubmit(e){
         e.preventDefault();
+        if(username===""){
+            return;
+        }
         value = username;
         store.set({username: value});
+        show = false;
     }    
 
     function handleKeyPress(e){
@@ -18,9 +23,13 @@
     }
 
     function resetUsername(){
-        username = '';
-        value = undefined;
-        if(ref){
+        show = true
+  
+      
+    }
+
+    $: {
+        if(show && ref){
             ref.focus()
         }
     }
@@ -28,9 +37,8 @@
 
 </script>
 
-{#if value === undefined}
+{#if show}
 <form on:submit={handleSubmit}>
-    <p>Hallo {username}</p>
     <input
         bind:this={ref}
         type="text"
