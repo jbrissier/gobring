@@ -1,13 +1,15 @@
 package model
 
 import (
+	"fmt"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 type Bring struct {
 	gorm.Model
-	ID          uint   `json:"id"`
+	ID          uint   `json:"id",gorm:"primaryKey"`
 	Where       string `json:"where"`
 	Until       uint   `json:"until"`
 	User        string `json:"user"`
@@ -16,10 +18,11 @@ type Bring struct {
 
 type BringItem struct {
 	gorm.Model
+	ID          uint   `json:"id",gorm:"primaryKey`
 	Bring       *Bring `gorm:"foreignKey:BringRef"`
 	BringRef    int
-	User        string
-	Description string
+	User        string `json:"user"`
+	Description string `json:"description"`
 }
 
 var db *gorm.DB
@@ -97,4 +100,46 @@ func GetAllBrings() ([]Bring, error) {
 	db.Find(&brings)
 
 	return brings, nil
+}
+
+func (b *Bring) GetItems() ([]BringItem, error) {
+
+	db, err := GetDB()
+
+	var items = []BringItem{}
+
+	if err != nil {
+		return nil, err
+	}
+	db.Find(&items, "bring_ref = ?", b.ID)
+	return items, nil
+}
+
+func AddBrintItem(b *Bring, item *BringItem) error {
+
+	db, err := GetDB()
+
+	if err != nil {
+		return err
+	}
+	item.Bring = b
+	db.Create(item)
+
+	return nil
+}
+
+func DeleteBringItem(id uint) error {
+
+	db, err := GetDB()
+
+	if err != nil {
+		return err
+	}
+	fmt.Printf("delete item with id %d", id)
+	res := db.Delete(&BringItem{}, id)
+	if res.Error != nil {
+		fmt.Printf("Error: %s", res.Error)
+		return res.Error
+	}
+	return nil
 }
