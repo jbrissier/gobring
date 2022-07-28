@@ -47,7 +47,7 @@ import _ from 'lodash'
 <div class="bring">
     
     <div class="info">
-        <div class="where">{data.where} </div>
+        <div class="where">{data.where} [{data.id}]</div>
         <div class="detail">
             <div>@{data.until}
              
