@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/jbrissier/gobring/server"
+	"github.com/jbrissier/gobring/api"
 	"github.com/joho/godotenv"
 )
 
@@ -36,5 +36,5 @@ func main() {
 	godotenv.Load(".env")
 
 	go startSvelt()
-	server.StarServer()
+	api.StarServer()
 }
