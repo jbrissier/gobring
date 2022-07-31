@@ -25,47 +25,58 @@ type BringItem struct {
 	Description string `json:"description"`
 }
 
-var db *gorm.DB
+type BringDB struct {
+	db         *gorm.DB
+	DBLocation string
+}
 
-func GetDB() (*gorm.DB, error) {
+func NewBringDB(location string) *BringDB {
+	return &BringDB{
+		DBLocation: location,
+	}
+}
+
+func (b *BringDB) GetDB() (*gorm.DB, error) {
 
 	// make the db connection singelton ? is this a good pattern
 
-	if db != nil {
-		return db, nil
+	if b.db != nil {
+		return b.db, nil
 	}
 
-	newDb, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	newDb, err := gorm.Open(sqlite.Open(b.DBLocation), &gorm.Config{})
 
 	if err != nil {
 		return nil, err
 	}
 
-	db = newDb
+	b.db = newDb
 
-	db.AutoMigrate(&Bring{})
-	db.AutoMigrate(&BringItem{})
+	b.db.AutoMigrate(&Bring{})
+	b.db.AutoMigrate(&BringItem{})
 
-	return db, nil
+	return b.db, nil
 
 }
 
-func (b *Bring) Save() error {
+func (b *BringDB) SaveBring(bring *Bring) error {
 
-	db, err := GetDB()
+	db, err := b.GetDB()
 	if err != nil {
 		return err
+
 	}
 
-	db.Save(b)
+	db.Save(bring)
 	return nil
+
 }
 
-func FindBring(id uint) (*Bring, error) {
+func (b *BringDB) FindBring(id uint) (*Bring, error) {
 
 	var bring Bring
 
-	db, err := GetDB()
+	db, err := b.GetDB()
 	if err != nil {
 		return nil, err
 	}
@@ -77,9 +88,9 @@ func FindBring(id uint) (*Bring, error) {
 	return &bring, nil
 
 }
-func DeleteBring(int uint) error {
+func (b *BringDB) DeleteBring(int uint) error {
 
-	db, err := GetDB()
+	db, err := b.GetDB()
 	if err != nil {
 		return err
 	}
@@ -88,11 +99,11 @@ func DeleteBring(int uint) error {
 	return nil
 }
 
-func GetAllBrings() ([]Bring, error) {
+func (b *BringDB) GetAllBrings() ([]Bring, error) {
 
 	var brings []Bring
 
-	db, err := GetDB()
+	db, err := b.GetDB()
 
 	if err != nil {
 		return nil, err
@@ -102,22 +113,22 @@ func GetAllBrings() ([]Bring, error) {
 	return brings, nil
 }
 
-func (b *Bring) GetItems() ([]BringItem, error) {
+func (b *BringDB) GetItems(bring *Bring) ([]BringItem, error) {
 
-	db, err := GetDB()
+	db, err := b.GetDB()
 
 	var items = []BringItem{}
 
 	if err != nil {
 		return nil, err
 	}
-	db.Find(&items, "bring_ref = ?", b.ID)
+	db.Find(&items, "bring_ref = ?", bring.ID)
 	return items, nil
 }
 
-func AddBrintItem(b *Bring, item *BringItem) error {
+func (br *BringDB) AddBrintItem(b *Bring, item *BringItem) error {
 
-	db, err := GetDB()
+	db, err := br.GetDB()
 
 	if err != nil {
 		return err
@@ -128,9 +139,9 @@ func AddBrintItem(b *Bring, item *BringItem) error {
 	return nil
 }
 
-func DeleteBringItem(id uint) error {
+func (br *BringDB) DeleteBringItem(id uint) error {
 
-	db, err := GetDB()
+	db, err := br.GetDB()
 
 	if err != nil {
 		return err

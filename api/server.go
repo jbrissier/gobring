@@ -9,13 +9,15 @@ import (
 	"github.com/jbrissier/gobring/model"
 )
 
+var bringDB *model.BringDB
+
 func CreateBring(c *gin.Context) {
 
 	var bring model.Bring
 
 	c.BindJSON(&bring)
 	fmt.Printf("Got Bring %v", bring)
-	bring.Save()
+	bringDB.SaveBring(&bring)
 
 }
 
@@ -24,7 +26,7 @@ func DeleteBring(c *gin.Context) {
 	id := c.Param("id")
 	idStr, _ := strconv.ParseUint(id, 10, 32)
 
-	err := model.DeleteBring((uint)(idStr))
+	err := bringDB.DeleteBring((uint)(idStr))
 	if err != nil {
 		c.JSON(404, gin.H{"Error": err.Error()})
 		return
@@ -36,7 +38,7 @@ func DeleteBring(c *gin.Context) {
 
 func AllBrings(c *gin.Context) {
 
-	brings, _ := model.GetAllBrings()
+	brings, _ := bringDB.GetAllBrings()
 
 	c.JSON(200, brings)
 
@@ -45,7 +47,7 @@ func AllBrings(c *gin.Context) {
 func GetSingelBring(id string) (*model.Bring, error) {
 	idStr, _ := strconv.ParseUint(id, 10, 32)
 
-	return model.FindBring((uint)(idStr))
+	return bringDB.FindBring((uint)(idStr))
 }
 
 func GetBring(c *gin.Context) {
@@ -76,7 +78,7 @@ func CreateBringItem(c *gin.Context) {
 		return
 	}
 
-	err = model.AddBrintItem(bring, &bringItem)
+	err = bringDB.AddBrintItem(bring, &bringItem)
 
 	if err != nil {
 		c.JSON(500, gin.H{"Error": "Can't add item"})
@@ -94,7 +96,7 @@ func GetBringItems(c *gin.Context) {
 		return
 	}
 
-	items, err := bring.GetItems()
+	items, err := bringDB.GetItems(bring)
 
 	if err != nil {
 		c.JSON(500, gin.H{"Error": "DB Error"})
@@ -107,7 +109,7 @@ func GetBringItems(c *gin.Context) {
 func DeleteBringItem(c *gin.Context) {
 
 	idStr, _ := strconv.ParseUint(c.Param("itemId"), 10, 32)
-	err := model.DeleteBringItem((uint)(idStr))
+	err := bringDB.DeleteBringItem((uint)(idStr))
 	if err != nil {
 		c.JSON(404, gin.H{"Error": err.Error()})
 		return
@@ -123,9 +125,12 @@ func CorsMiddelware() gin.HandlerFunc {
 	}
 }
 
-func StarServer() {
+func SetupRouter(dbLocation string) *gin.Engine {
+
+	bringDB = model.NewBringDB(dbLocation)
+
 	r := gin.Default()
-	r.Use(static.Serve("/", static.LocalFile("svelte-app/public", false)))
+	r.Use(static.Serve("/", static.LocalFile("./svelte-app/public", false)))
 	r.Use(CorsMiddelware())
 
 	api := r.Group("/api")
@@ -140,7 +145,12 @@ func StarServer() {
 	api.POST("bring/:id", CreateBringItem)
 	api.GET("bring/:id/items", GetBringItems)
 	api.DELETE("bring/:id/items/:itemid", DeleteBringItem)
-	//api.DELETE("bring/:id", DeleteBringItem)
+
+	return r
+}
+
+func StarServer() {
+	r := SetupRouter("test.db")
 
 	r.Run()
 }
