@@ -22,27 +22,25 @@
 <div class="container">
 
 
-	<div class="plus">
-		+
+	<div class="login">
+		
+		<Login bind:value={username}/>
 	</div>
-
-
-	<div class={$brings.length === 0?"logo":"logo-top"}>
+	
+	
+	
+	<div class="logo">
 		
 		<h1>GoBring</h1>
 		<p>Bring good to your colleagues.</p>
 		
 	</div>
 	
-	<div class="login">
-		
-		<Login bind:value={username}/>
-	</div>
-	
 	<div>
 		<Brings/>
 	</div>
-
+	
+	
 
 </div>
 
@@ -51,6 +49,7 @@
 	.container{
 		display: flex;
 		justify-content: center;
+		flex-direction: column;
 		align-items: center;
 		width: 100%;
 	
@@ -68,13 +67,6 @@
 
 	}
 
-	.logo-top{
-		position: absolute;
-		top: 1rem;
-		flex-direction: column;
-		margin: 0 2rem;
-		left: 1rem;
-	}
 
 	.logo, .logo-top h1,p{
 		margin: 0;

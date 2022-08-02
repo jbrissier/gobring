@@ -51,5 +51,5 @@
     
 </form>
 {:else}
-<a  on:click={resetUsername}>{value}</a>
+<p on:click={resetUsername}>{value}</p>
 {/if}
