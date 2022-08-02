@@ -44,7 +44,7 @@ import _ from 'lodash'
 
 </script>
 
-<div class="bring">
+<div class="bring  bg-slate-900 text-slate-100 p-5 mt-1">
     
     <div class="info">
         <div class="where">{data.where} [{data.id}]</div>
@@ -64,35 +64,3 @@ import _ from 'lodash'
 
 
 
-<style>
-
-    .bring{
-        margin: 1rem 0;
-        padding: 3rem;
-        border-left: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .plus{
-		font-size: 2rem;
-		cursor: pointer;
-	}
-
-    .bring .info{
-        display: flex;
- 
-        align-items: center;
-        
-    }
-    .where{
-        margin-right: 2rem;
-        font-size: 1.5rem;
-        
-    }
-    .bring .info .detail{
-        display: flex;
-        flex-direction: column;
-    }
-
-</style>

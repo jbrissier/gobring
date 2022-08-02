@@ -19,24 +19,24 @@
 		}
 	}
 </script>
-<div class="container">
+<div class="login absolute right-3 top-3">
+	
+	<Login bind:value={username}/>
+</div>
+<div class=" bg-slate-400 flex flex-col w-screen h-screen p-10 justify-center items-center	">
 
 
-	<div class="login">
+	
+	
+	
+	<div class="logo m-5">
 		
-		<Login bind:value={username}/>
-	</div>
-	
-	
-	
-	<div class="logo">
-		
-		<h1>GoBring</h1>
-		<p>Bring good to your colleagues.</p>
+		<h1 class="text-4xl text-slate-100">GoBring</h1>
+		<p class="text-slate-900">Bring good to your colleagues.</p>
 		
 	</div>
 	
-	<div>
+	<div class="m-10">
 		<Brings/>
 	</div>
 	
@@ -46,37 +46,9 @@
 
 <style>
 
-	.container{
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-		align-items: center;
-		width: 100%;
-	
-		height: 100%;
+	*{
+		font-family: 'Roboto Mono', monospace;
 	}
-	.plus{
-		font-size: 4rem;
-		margin: 0 1rem;
-		cursor: pointer;
-	}
-	.logo{
-		display: flex;
-		flex-direction: column;
-		margin: 0 2rem;
-
-	}
-
-
-	.logo, .logo-top h1,p{
-		margin: 0;
-	}
-	.login{
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-	}
-
 
 
 </style>
