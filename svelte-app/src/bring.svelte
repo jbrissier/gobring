@@ -43,7 +43,7 @@ import _ from 'lodash'
     });
 
 </script>
-<div class="flex flex-col">
+<div class="flex flex-col w-1/2">
 
     <div class="bring  bg-slate-300 text-slate-900 p-5 mt-1">
 
