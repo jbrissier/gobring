@@ -9,20 +9,11 @@
     let defaultOptions = ["Aldi", "Lidl", "Rewe", "Edka", "Döner", "Pizza", "Curry", "sonstiges"]
     let selected = defaultOptions[0];
 
-    $: {
-        where = selected
-        if(selected === "sonstiges"){
-            if(ref){
-                ref.focus(); 
 
-            }
-
-        }
-    }
 
 
     const dispatch = createEventDispatcher();
-    
+
     function saveNewBring() {
 
         fetch("/api/bring", {
@@ -32,14 +23,14 @@
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({ where: where, until: _.toInteger( time), user: $store.username }) }).then(data => {
-     
+
             dispatch("change", data)
             brings.update(brings => [...brings, data])
 
 
         });
     }
-    
+
     function checkEnter(e){
         console.log(e)
         if(e.key === "Enter"){
@@ -48,23 +39,16 @@
 
     }
 
-  
+
 
 </script>
 
-<div>
+<div class="flex flex-col pt-1 w-1/2 align-middle justify-center">
     <p>Bringst du was mit {$store.username}?</p>
 
-    {#if selected != "sonstiges"}
-    <select bind:value={selected}>
-        {#each defaultOptions as df}
-            <option>{df}</option>
-        {/each}
-    </select>
-    {/if}
-    {#if selected === "sonstiges"}
-        <input  bind:this={ref} type="text" placeholder="Where" bind:value={where} on:keypress={checkEnter} id="where" />
-    {/if}
+
+    <input class="mt-2 pl-2 p-4 mb-2" bind:this={ref} type="text" placeholder="Where" bind:value={where} on:keypress={checkEnter} id="where" />
+
     <Time bind:time={time} />
-    <button on:click={saveNewBring}> ok</button>
+    <button on:click={saveNewBring} class="text-slate-100 p-4 mb-2 bg-slate-600 shadow-md ">  ok</button>
 </div>

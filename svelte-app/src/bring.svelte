@@ -6,8 +6,8 @@ import _ from 'lodash'
     export let id = 0;
     export let data = {}
     const dispatch = createEventDispatcher();
-    
-   
+
+
     function deleteBring(){
         fetch(`/api/bring/${data.id}`, {
             method: 'DELETE'
@@ -43,24 +43,24 @@ import _ from 'lodash'
     });
 
 </script>
+<div class="flex flex-col">
 
-<div class="bring  bg-slate-900 text-slate-100 p-5 mt-1">
-    
-    <div class="info">
-        <div class="where">{data.where} [{data.id}]</div>
-        <div class="detail">
-            <div>@{data.until}
-             
-        </div>
-            <div>{data.user}</div>
-        </div>
+    <div class="bring  bg-slate-300 text-slate-900 p-5 mt-1">
+
+        <div class="info">
+            <div class="where">{data.user} geht zu {data.where} [{data.id}]</div>
+            <div class="detail">
+                <div>Bestellungen bis {' '} @{data.until}</div>
+
+            </div>
     </div>
 
     <div class="plus">+</div>
 
 </div>
 
-<button on:click={deleteBring}>delete</button>
+<button class="text-slate-100 p-2 mb-2 bg-slate-600 shadow-md mt-1 self-end" on:click={deleteBring}>delete</button>
 
+</div>
 
 

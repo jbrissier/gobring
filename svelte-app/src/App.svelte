@@ -5,7 +5,7 @@
 	import { onMount } from "svelte";
 	import _ from "lodash";
 	import {brings} from './store.js'
-	
+
 	let username;
 
 	onMount(() => {
@@ -20,27 +20,27 @@
 	}
 </script>
 <div class="login absolute right-3 top-3">
-	
+
 	<Login bind:value={username}/>
 </div>
-<div class=" bg-slate-400 flex flex-col w-screen h-screen p-10 justify-center items-center	">
+<div class=" bg-slate-100 flex flex-col w-screen h-screen p-10 justify-center items-center	">
 
 
-	
-	
-	
+
+
+
 	<div class="logo m-5">
-		
-		<h1 class="text-4xl text-slate-100">GoBring</h1>
+
+		<h1 class="text-4xl text-slate-900">GoBring</h1>
 		<p class="text-slate-900">Bring good to your colleagues.</p>
-		
+
 	</div>
-	
-	<div class="m-10">
+
+	<div class="my-2 w-10/12 flex flex-col justify-center items-center mt-5">
 		<Brings/>
 	</div>
-	
-	
+
+
 
 </div>
 

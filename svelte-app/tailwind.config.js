@@ -3,7 +3,7 @@ module.exports = {
     ],
     purge: {
         content: [
-            "./src/App.svelte",
+            "./src/**/*.svelte",
         ],
     },
 };
