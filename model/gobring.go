@@ -9,18 +9,18 @@ import (
 
 type Bring struct {
 	gorm.Model
-	ID          uint   `json:"id",gorm:"primaryKey"`
-	Where       string `json:"where"`
-	Until       uint   `json:"until"`
-	User        string `json:"user"`
-	Description string `json:"description"`
+	ID          uint        `json:"id" gorm:"primaryKey"`
+	Where       string      `json:"where"`
+	Until       uint        `json:"until"`
+	User        string      `json:"user"`
+	Description string      `json:"description"`
+	Items       []BringItem `json:"items"`
 }
 
 type BringItem struct {
 	gorm.Model
-	ID          uint   `json:"id",gorm:"primaryKey`
-	Bring       *Bring `gorm:"foreignKey:BringRef"`
-	BringRef    int
+	ID          uint `json:"id" gorm:"primaryKey"`
+	BringID     uint
 	User        string `json:"user"`
 	Description string `json:"description"`
 }
@@ -80,7 +80,7 @@ func (b *BringDB) FindBring(id uint) (*Bring, error) {
 	if err != nil {
 		return nil, err
 	}
-	res := db.Find(&Bring{ID: id}).First(&bring)
+	res := db.Preload("Items").Find(&Bring{ID: id}).First(&bring)
 	if res.Error != nil {
 		return nil, res.Error
 	}
@@ -108,7 +108,7 @@ func (b *BringDB) GetAllBrings() ([]Bring, error) {
 	if err != nil {
 		return nil, err
 	}
-	db.Find(&brings)
+	db.Preload("Items").Find(&brings)
 
 	return brings, nil
 }
@@ -133,7 +133,7 @@ func (br *BringDB) AddBrintItem(b *Bring, item *BringItem) error {
 	if err != nil {
 		return err
 	}
-	item.Bring = b
+	item.BringID = b.ID
 	db.Create(item)
 
 	return nil
