@@ -30,6 +30,12 @@ type BringDB struct {
 	DBLocation string
 }
 
+type User struct {
+	Name      string `json:"name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+}
+
 func NewBringDB(location string) *BringDB {
 	return &BringDB{
 		DBLocation: location,

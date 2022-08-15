@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/gob"
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-contrib/sessions"
@@ -129,6 +130,68 @@ func CorsMiddelware() gin.HandlerFunc {
 	}
 }
 
+func unPackProfileValue(va interface{}, key string) string {
+
+	val, castOk := va.(map[string]interface{})
+	if !castOk {
+		//cast not work session is mission or other ...
+		return ""
+	}
+
+	v, ok := val[key]
+	if ok {
+		return v.(string)
+	}
+	return ""
+}
+
+func GetUserInfo(c *gin.Context) {
+
+	session := sessions.Default(c)
+	profile := session.Get("profile")
+
+	// if profile is not set
+	if profile == nil {
+		return
+	}
+
+	// convert to modle User
+	user := model.User{
+
+		Name:      unPackProfileValue(profile, "name"),
+		FirstName: unPackProfileValue(profile, "given_name"),
+		LastName:  unPackProfileValue(profile, "family_name"),
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+func CheckUserMiddelware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		profile := session.Get("profile")
+
+		if profile == nil {
+			c.Redirect(http.StatusTemporaryRedirect, "/login")
+		}
+
+	}
+}
+
+func CheckUserOr403() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+
+		session := sessions.Default(c)
+		profile := session.Get("profile")
+
+		if profile == nil {
+			c.AbortWithStatus(http.StatusForbidden)
+		}
+	}
+
+}
+
 func SetupRouter(dbLocation string) *gin.Engine {
 
 	bringDB = model.NewBringDB(dbLocation)
@@ -139,6 +202,7 @@ func SetupRouter(dbLocation string) *gin.Engine {
 
 	store := cookie.NewStore([]byte("secret"))
 	authenticator, err := auth.New()
+
 	if err != nil {
 		panic(err)
 	}
@@ -146,12 +210,10 @@ func SetupRouter(dbLocation string) *gin.Engine {
 	r := gin.Default()
 	r.Use(sessions.Sessions("auth-session", store))
 
+	api := r.Group("/api")
+
 	r.GET("/login", auth.LoginHandler(authenticator))
 	r.GET("/callback", auth.CallbackHandler(authenticator))
-
-	r.Use(static.Serve("/", static.LocalFile("./svelte-app/public", false)))
-	r.Use(CorsMiddelware())
-
 	r.GET("/user", func(c *gin.Context) {
 
 		session := sessions.Default(c)
@@ -159,12 +221,21 @@ func SetupRouter(dbLocation string) *gin.Engine {
 		c.JSON(200, gin.H{"pofile": profile})
 	})
 
-	api := r.Group("/api")
+	// enforce user by auto redirect to login page
+	r.Use(CheckUserMiddelware())
+	r.Use(CorsMiddelware())
+
+	r.Use(static.Serve("/", static.LocalFile("./svelte-app/public", false)))
+
+	// register the api endpoints and check for auth
+
+	api.Use(CheckUserOr403())
 
 	api.GET("bring", AllBrings)
 	api.POST("bring", CreateBring)
 	api.GET("bring/:id", GetBring)
 	api.DELETE("bring/:id", DeleteBring)
+	api.GET("user", GetUserInfo)
 
 	// add and remove items to bring
 

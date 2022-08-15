@@ -1,11 +1,31 @@
 <script>
     import {store} from './store.js';
+    import {onMount} from "svelte"
     
     let username = '';
     export let value = undefined; 
     let show = value !== undefined
     let ref = null;
     
+
+    onMount(()=>{
+
+        fetch("/api/user").then(data=>data.json()).then(js=>{
+            username = js.name
+            if(js.first_name ){
+                value = js.first_name
+            }else{
+                value = js.name
+
+            }
+
+        })
+
+
+    })
+
+
+
     function handleSubmit(e){
         e.preventDefault();
         if(username===""){
