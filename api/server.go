@@ -1,11 +1,15 @@
 package api
 
 import (
+	"encoding/gob"
 	"fmt"
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/jbrissier/gobring/api/auth"
 	"github.com/jbrissier/gobring/model"
 )
 
@@ -129,9 +133,31 @@ func SetupRouter(dbLocation string) *gin.Engine {
 
 	bringDB = model.NewBringDB(dbLocation)
 
+	// To store custom types in our cookies,
+	// we must first register them using gob.Register
+	gob.Register(map[string]interface{}{})
+
+	store := cookie.NewStore([]byte("secret"))
+	authenticator, err := auth.New()
+	if err != nil {
+		panic(err)
+	}
+
 	r := gin.Default()
+	r.Use(sessions.Sessions("auth-session", store))
+
+	r.GET("/login", auth.LoginHandler(authenticator))
+	r.GET("/callback", auth.CallbackHandler(authenticator))
+
 	r.Use(static.Serve("/", static.LocalFile("./svelte-app/public", false)))
 	r.Use(CorsMiddelware())
+
+	r.GET("/user", func(c *gin.Context) {
+
+		session := sessions.Default(c)
+		profile := session.Get("profile")
+		c.JSON(200, gin.H{"pofile": profile})
+	})
 
 	api := r.Group("/api")
 
