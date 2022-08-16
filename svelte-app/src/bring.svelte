@@ -53,7 +53,7 @@
     onMount(() => {
         console.log("data is not empty", data);
   
-        setInterval(calculateRemaningTime(), 10000)
+        setInterval(calculateRemaningTime, 1000)
 
 
         if (!_.isEmpty(data)) {
@@ -99,7 +99,6 @@
 </script>
 
 
-{#if diff < 0}
 <div class="flex flex-col w-1/2">
     <div class="bring  bg-slate-300 text-slate-900 p-5 mt-1">
         <div class="info">
@@ -134,4 +133,3 @@
         on:click={deleteBring}>delete</button
     >
 </div>
-{/if}

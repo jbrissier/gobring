@@ -1,9 +1,15 @@
 <script>
+    import { onMount } from 'svelte'
     import _ from "lodash";
     import moment from 'moment'
-    export let time;
-    let timeText = time;
-    let saveInput = '12:15'
+    
+    let innterTime = moment().add(10, 'minutes') ;
+    let saveInput = innterTime.format("HH:mm")
+    export let time = innterTime ;
+
+    onMount(()=>{
+        time = innterTime;
+    })
 
     function formatTime(e) {
 
@@ -17,29 +23,37 @@
         }
 
         if(v.length === 6){
-            e.target.value =saveInput
+            e.target.value = saveInput
             return
         }
-
+        if(e.keyCode == '38'){
+            innterTime = innterTime.add(5, "minutes")
+            e.target.value = innterTime.format("HH:mm")
+        
+        }
+        if(e.keyCode == '40'){
+            innterTime = innterTime.add(-5, "minutes")
+            e.target.value = innterTime.format("HH:mm")
+        
+        }
         saveInput = e.target.value
 
 
-
-
-
         time = moment(saveInput, "HH:mm")
+        innterTime = time;
+
+   
+
     }
 
-    $:{
-        console.log("->time",time)
-    }
+  
 
 </script>
 
 <input
     type="text"
     placeholder="Time"
-    value="12:15"
+    value={saveInput}
     class="pl-2 p-4 mb-2"
 
     on:keyup={formatTime}
