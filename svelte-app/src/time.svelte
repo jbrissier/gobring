@@ -1,6 +1,6 @@
 <script>
     import _ from "lodash";
-
+    import moment from 'moment'
     export let time;
     let timeText = time;
     let saveInput = '12:15'
@@ -27,8 +27,13 @@
 
 
 
-        time = _.replace(timeText, ":", "");
+        time = moment(saveInput, "HH:mm")
     }
+
+    $:{
+        console.log("->time",time)
+    }
+
 </script>
 
 <input

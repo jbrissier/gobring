@@ -1,12 +1,15 @@
 <script>
     import { onMount, createEventDispatcher } from "svelte";
     import {store} from './store.js' 
+    import moment from 'moment'
     import BringItem from "./bringItem.svelte";
     import _ from "lodash";
 
     export let id = 0;
     export let data = {};
     let items = []
+    let remaining = ""
+    let diff = 0 
 
     const dispatch = createEventDispatcher();
 
@@ -40,18 +43,32 @@
 
     }
 
+    function calculateRemaningTime(){
 
-
+        let now = moment()
+        diff = now.diff(moment(data.until))
+        console.log(diff)
+        remaining = moment.duration(diff).humanize()
+    }
     onMount(() => {
         console.log("data is not empty", data);
   
+        setInterval(calculateRemaningTime(), 10000)
+
+
         if (!_.isEmpty(data)) {
+            calculateRemaningTime()
             return;
         }
 
         fetchData().then((serverDate) => {
             data = serverDate;
+            calculateRemaningTime()
         });
+
+
+
+
     });
 
     function fetchItems(){
@@ -81,6 +98,8 @@
     }
 </script>
 
+
+{#if diff < 0}
 <div class="flex flex-col w-1/2">
     <div class="bring  bg-slate-300 text-slate-900 p-5 mt-1">
         <div class="info">
@@ -88,7 +107,7 @@
                 {data.user} geht zu {data.where} [{data.id}]
             </div>
             <div class="detail">
-                <div>Bestellungen bis {" "} @{data.until}</div>
+                <div>Bestellungen bis {" "} @{moment(data.until).format("HH:mm")} ({remaining})</div>
             </div>
         </div>
 
@@ -115,3 +134,4 @@
         on:click={deleteBring}>delete</button
     >
 </div>
+{/if}
