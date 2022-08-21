@@ -3,7 +3,7 @@
     import NewBring from "./newBring.svelte";
     import {brings} from './store.js'
     import { onMount } from "svelte";
-
+    import _ from 'lodash'
 
 
 
@@ -13,8 +13,6 @@
         return fetch(`/api/bring`)
             .then(response => response.json())
             .then(data => {
-
-
 
                 brings.set(data)
 
@@ -34,4 +32,4 @@
 <Bring on:change={fetchData} id={bring.ID} data={bring}/>
 {/each}
 
-<NewBring/>
+<NewBring class="mt-10"/>

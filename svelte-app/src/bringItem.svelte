@@ -15,6 +15,7 @@
         if (e.key === "Enter") {
             add = false;
             dispatch("newBring", {value});
+            value = ""
         }
     }
 
@@ -25,14 +26,14 @@
     }
 </script>
 
-<div class="plus cursor-pointer my-4" on:click={showAdd}>+</div>
+<div class="plus cursor-pointer  text-2xl flex align-center" on:click={showAdd}>+</div>
 {#if add}
     <input
         bind:this={add_ref}
         bind:value
         on:keyup={keyUp}
         type="text"
-        placeholder="Item"
-        class="description ml-4 mt-4 pl-2 p-4 mb-2"
+        placeholder="Ich brauche..."
+        class="description pl-2 p-4  outline-none"
     />
 {/if}

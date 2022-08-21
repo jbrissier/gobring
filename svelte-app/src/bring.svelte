@@ -36,7 +36,6 @@
     async function  updateBring(){
 
         const newData = await fetchData()
-        console.log("......",newData)
         data = newData;
 
 
@@ -51,9 +50,8 @@
         remaining = moment.duration(diff).humanize()
     }
     onMount(() => {
-        console.log("data is not empty", data);
   
-        setInterval(calculateRemaningTime, 1000)
+        setInterval(calculateRemaningTime, 10000)
 
 
         if (!_.isEmpty(data)) {
@@ -100,36 +98,41 @@
 
 
 <div class="flex flex-col w-1/2">
-    <div class="bring  bg-slate-300 text-slate-900 p-5 mt-1">
-        <div class="info">
-            <div class="where">
-                {data.user} geht zu {data.where} [{data.id}]
+    <div class="bring  bg-white shadow-xl text-slate-900 p-5 mt-1">
+
+
+            <div class="flex justify-between where mb-5 align-center">
+                <div>
+                    <strong>{data.user}</strong> → <strong>{data.where}</strong> {moment(data.until).format("HH:mm")} ({remaining})
+                </div>
+                <div>
+                    <button
+                    class="text-xl "
+                    on:click={deleteBring}>✕</button
+                    >
+                </div>
             </div>
-            <div class="detail">
-                <div>Bestellungen bis {" "} @{moment(data.until).format("HH:mm")} ({remaining})</div>
-            </div>
-        </div>
+         
 
         <div class="pl-3 mt-3">  
 
-
+            {#if data.items}
             {#each data.items as item}
             
             <p>{item.user}: {item.description}</p>
             
             {/each}
+            {/if}
         </div>
             
        
       
 
-        <div class="flex items-center">
+        <div class="flex items-center pl-3 align-middle">
             <BringItem on:newBring={newItem} />
         </div>
+
+
     </div>
 
-    <button
-        class="text-slate-100 p-2 mb-2 bg-slate-600 shadow-md mt-1 self-end"
-        on:click={deleteBring}>delete</button
-    >
 </div>

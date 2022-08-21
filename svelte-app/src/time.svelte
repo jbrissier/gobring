@@ -54,7 +54,7 @@
     type="text"
     placeholder="Time"
     value={saveInput}
-    class="pl-2 p-4 mb-2"
+    class="pl-2 p-4 mb-2 outline-none"
 
     on:keyup={formatTime}
     id="time"

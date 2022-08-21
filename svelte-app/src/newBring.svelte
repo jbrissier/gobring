@@ -1,54 +1,87 @@
 <script>
-    import {createEventDispatcher, onMount} from 'svelte'
-    import {store, brings} from './store.js'
-    import Time from './time.svelte'
-    import _ from 'lodash'
+    import { createEventDispatcher, onMount } from "svelte";
+    import { store, brings } from "./store.js";
+    import Time from "./time.svelte";
+    import _ from "lodash";
+import Brings from "./brings.svelte";
+import BringItem from "./bringItem.svelte";
+import Bring from "./bring.svelte";
     let where;
-    let ref = null;
     let time = "";
-    let defaultOptions = ["Aldi", "Lidl", "Rewe", "Edka", "Döner", "Pizza", "Curry", "sonstiges"]
-    let selected = defaultOptions[0];
-
-
-
+    let show = false;
+    let ref = null;
 
     const dispatch = createEventDispatcher();
 
     function saveNewBring() {
-
         fetch("/api/bring", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({ where: where, until: _.toInteger( time), user: $store.username }) }).then(data => {
-
-            dispatch("change", data)
-            brings.update(brings => [...brings, data])
-
-
-        });
+            body: JSON.stringify({
+                where: where,
+                until: _.toInteger(time),
+                user: $store.username,
+            }),
+        }) 
+            .then((data) => data.json())
+            .then((data) => {
+                console.log("resulg", data)
+                dispatch("change", data);
+                brings.update((b) => {console.log(b); return [...b, data]});
+            });
+        show = false;
     }
 
-    function checkEnter(e){
-        console.log(e)
-        if(e.key === "Enter"){
-            saveNewBring()
+    function checkEnter(e) {
+        console.log(e);
+        if (e.key === "Enter") {
+            saveNewBring();
         }
-
     }
 
-
-
+    function showForm() {
+        show = !show;
+        if (ref) {
+            ref.focus();
+        }
+    }
+    $: {
+        if (ref) {
+            ref.focus();
+        }
+    }
 </script>
 
-<div class="flex flex-col pt-1 w-1/2 align-middle justify-center">
-    <p>Bringst du was mit {$store.username}?</p>
+{#if show}
+    <div
+        class="flex flex-col pt-1 w-1/2 align-middle justify-center absolute bg-white p-10 shadow-xl"
+    >
+        <div class="flex justify-between items-center">
 
+            <h3 class="py-5 text-xl">Wo gehts hin, was bringst du mit?</h3>
+            <div class="cursor-pointer p-3" on:click={()=>show=false}>x</div>
+        </div>
 
-    <input class="mt-2 pl-2 p-4 mb-2" bind:this={ref} type="text" placeholder="Where" bind:value={where} on:keypress={checkEnter} id="where" />
+        <input
+            bind:this={ref}
+            class="mt-2 pl-2 p-4 mb-2 outline-none"
+            type="text"
+            placeholder="Where"
+            bind:value={where}
+            on:keypress={checkEnter}
+            id="where"
+        />
 
-    <Time bind:time={time} />
-    <button on:click={saveNewBring} class="text-slate-100 p-4 mb-2 bg-slate-600 shadow-md ">  ok</button>
-</div>
+        <Time bind:time />
+        <button
+            on:click={saveNewBring}
+            class="text-slate-100 p-4 mb-2 bg-slate-600 shadow-md "
+        >
+            ok</button
+        >
+    </div>
+{:else}
+    <div on:click={showForm} class="cursor-pointer text-4xl mt-10">+</div>
+{/if}

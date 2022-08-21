@@ -31,7 +31,7 @@
 
 	<div class="logo m-5">
 
-		<h1 class="text-4xl text-slate-900">GoBring</h1>
+		<h1 class="text-4xl text-slate-900"><span class="text-blue-300 font-bold">Go</span>Bring</h1>
 		<p class="text-slate-900">Bring good to your colleagues.</p>
 
 	</div>
