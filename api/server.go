@@ -24,6 +24,7 @@ func CreateBring(c *gin.Context) {
 	fmt.Printf("Got Bring %v", bring)
 	bringDB.SaveBring(&bring)
 
+	c.JSON(200, bring)
 }
 
 func DeleteBring(c *gin.Context) {
