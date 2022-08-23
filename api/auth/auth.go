@@ -27,7 +27,7 @@ func New() (*Authenticator, error) {
 	callback_url := os.Getenv("AUTH0_CALLBACK_URL")
 	if callback_url == "" {
 		// try to get railway url
-		callback_url = os.Getenv("RAILWAY_STATIC_URL") + "/callback"
+		callback_url = "https://" + os.Getenv("RAILWAY_STATIC_URL") + "/callback"
 	}
 
 	conf := oauth2.Config{
