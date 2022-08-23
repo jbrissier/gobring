@@ -6,7 +6,7 @@ your collages.
 ## TODO
 The app is not ready at all and a lot of things have to be done
 * Deployment
- * Better build pipeline with railwaiy to app
+* Better build pipeline with railway, some build system for the npm build. more investigation.
 * Better testing
 
 
