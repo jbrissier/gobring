@@ -5,6 +5,8 @@ your collages.
 
 ## TODO
 The app is not ready at all and a lot of things have to be done
+* Mobile 
+* Bugfixes ;) 
 * Deployment
 * Better build pipeline with railway, some build system for the npm build. more investigation.
 * Better testing
