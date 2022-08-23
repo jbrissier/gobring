@@ -24,11 +24,16 @@ func New() (*Authenticator, error) {
 	if err != nil {
 		return nil, err
 	}
+	callback_url := os.Getenv("AUTH0_CALLBACK_URL")
+	if callback_url == "" {
+		// try to get railway url
+		callback_url = os.Getenv("RAILWAY_STATIC_URL")
+	}
 
 	conf := oauth2.Config{
 		ClientID:     os.Getenv("AUTH0_CLIENT_ID"),
 		ClientSecret: os.Getenv("AUTH0_CLIENT_SECRET"),
-		RedirectURL:  os.Getenv("AUTH0_CALLBACK_URL"),
+		RedirectURL:  callback_url,
 		Endpoint:     provider.Endpoint(),
 		Scopes:       []string{oidc.ScopeOpenID, "profile"},
 	}
