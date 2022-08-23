@@ -2,8 +2,10 @@ package model
 
 import (
 	"fmt"
+	"os"
 
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
+
 	"gorm.io/gorm"
 )
 
@@ -49,8 +51,8 @@ func (b *BringDB) GetDB() (*gorm.DB, error) {
 	if b.db != nil {
 		return b.db, nil
 	}
-
-	newDb, err := gorm.Open(sqlite.Open(b.DBLocation), &gorm.Config{})
+	dsn := os.Getenv("DB_DNS")
+	newDb, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		return nil, err
