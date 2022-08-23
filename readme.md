@@ -1,5 +1,5 @@
 # GoBring
-Gobring is a simple app to organize, to bring the gods from other places for yo
+Gobring is a simple app to organize the shopping for your colleags 
 your collages.
 
 
