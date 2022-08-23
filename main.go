@@ -14,7 +14,7 @@ func startSvelt() {
 	npm := os.Getenv("NPM_PATH")
 
 	if npm == "" {
-		npm = "/usr/local/bin/npm"
+		return
 	}
 
 	cmd := exec.Command(npm, "run", "dev")
