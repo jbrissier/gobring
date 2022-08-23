@@ -32,4 +32,4 @@
 <Bring on:change={fetchData} id={bring.ID} data={bring}/>
 {/each}
 
-<NewBring class="mt-10"/>
+<NewBring/>
