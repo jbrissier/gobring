@@ -46,7 +46,6 @@
 
         let now = moment()
         diff = now.diff(moment(data.until))
-        console.log(diff)
         remaining = moment.duration(diff).humanize()
     }
     onMount(() => {
@@ -73,7 +72,6 @@
         fetch(`api/bring/${id}/items`).then(data=>data.json()).then(jd=>{
 
             items = jd
-            console.log(jd)
 
 
         })
@@ -97,7 +95,7 @@
 </script>
 
 
-<div class="flex flex-col w-1/2">
+<div class="flex flex-col md:w-1/2 w-full">
     <div class="bring  bg-white shadow-xl text-slate-900 p-5 mt-1">
 
 

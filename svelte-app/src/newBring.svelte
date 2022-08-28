@@ -27,15 +27,13 @@ import Bring from "./bring.svelte";
         }) 
             .then((data) => data.json())
             .then((data) => {
-                console.log("resulg", data)
                 dispatch("change", data);
-                brings.update((b) => {console.log(b); return [...b, data]});
+                brings.update((b) => {return [...b, data]});
             });
         show = false;
     }
 
     function checkEnter(e) {
-        console.log(e);
         if (e.key === "Enter") {
             saveNewBring();
         }
@@ -56,7 +54,7 @@ import Bring from "./bring.svelte";
 
 {#if show}
     <div
-        class="flex flex-col pt-1 w-1/2 align-middle justify-center absolute bg-white p-10 shadow-xl"
+        class="flex flex-col pt-1 w-11/12 md:w-1/2 align-middle justify-center absolute bg-white p-10 shadow-xl"
     >
         <div class="flex justify-between items-center">
 

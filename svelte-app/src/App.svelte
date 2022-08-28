@@ -36,7 +36,7 @@
 
 	</div>
 
-	<div class="my-2 w-10/12 flex flex-col justify-center items-center mt-5">
+	<div class="my-2 w-full md:w-10/12 flex flex-col justify-center items-center mt-5">
 		<Brings/>
 	</div>
 

@@ -536,14 +536,14 @@ video {
 .mt-3 {
   margin-top: 0.75rem;
 }
-.mt-10 {
-  margin-top: 2.5rem;
-}
 .mt-2 {
   margin-top: 0.5rem;
 }
 .mb-2 {
   margin-bottom: 0.5rem;
+}
+.mt-10 {
+  margin-top: 2.5rem;
 }
 .flex {
   display: flex;
@@ -559,6 +559,12 @@ video {
 }
 .w-1\/2 {
   width: 50%;
+}
+.w-full {
+  width: 100%;
+}
+.w-11\/12 {
+  width: 91.666667%;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -655,4 +661,14 @@ video {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+@media (min-width: 768px) {
+
+  .md\:w-10\/12 {
+    width: 83.333333%;
+  }
+
+  .md\:w-1\/2 {
+    width: 50%;
+  }
 }
