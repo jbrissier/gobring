@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"gorm.io/driver/postgres"
-
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -50,9 +50,22 @@ func (b *BringDB) GetDB() (*gorm.DB, error) {
 
 	if b.db != nil {
 		return b.db, nil
+
 	}
+
+	env := os.Getenv("ENV")
+	var newDb *gorm.DB
+	var err error
+	// use sqlite db if development set in evn development
 	dsn := os.Getenv("DB_DNS")
-	newDb, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if env == "development" {
+
+		newDb, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+
+	} else {
+
+		newDb, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	}
 
 	if err != nil {
 		return nil, err
